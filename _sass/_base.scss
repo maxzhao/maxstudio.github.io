@@ -8,13 +8,13 @@ hack with below:
   font-family: 'Advent Pro';
   font-style: normal;
   font-weight: 400;
-  src: local('Advent Pro Regular'), local('AdventPro-Regular'), url({{ ASSET_PATH }}/googlefonts/rT9jpj7pBpZV6AmssbZKk73hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
+  src: local('Advent Pro Regular'), local('AdventPro-Regular'), url(../googlefonts/rT9jpj7pBpZV6AmssbZKk73hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
 }
 @font-face {
   font-family: 'Oxygen';
   font-style: normal;
   font-weight: 400;
-  src: local('Oxygen'), local('Oxygen-Regular'), url({{ ASSET_PATH }}/googlefonts/eAWT4YudG0otf3rlsJD6zOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
+  src: local('Oxygen'), local('Oxygen-Regular'), url(../googlefonts/eAWT4YudG0otf3rlsJD6zOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
 }
 
 /* Theme Vars */
