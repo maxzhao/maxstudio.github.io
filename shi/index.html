@@ -23,46 +23,32 @@
 <div class="wrap">
 
     <div class="try_list">
-        <ul class="list cf">
-
-            <li id="onclickclass0" class="wakeup_j">
-                <a href="javascript:;" class="Click_bj app_j" >
-                    <div class="list_info cf">
-                        <div class="App_icon fl"><img src="http://is2.mzstatic.com/image/thumb/Purple69/v4/e4/b4/f2/e4b4f2a3-f22b-125b-b01e-20cdf65a2fdb/source/512x512bb.jpg" alt=""/></div>
-                        <div class="App_info fl">
-                            <h4 class="App_name">
-
-
-
-                                大智慧
-
-
-                            </h4>
-                            <p class="guild">
-                                <span class="app_type" style="margin-right:25px;">财务</span>
-                                <span class="remaining_amount">剩余4000个</span>
-                            </p>
-                            <span class="Price_tag price canplay666606316" id="666606316265634819197">
-                            	＋2.00元
-                            </span>
-                            <script type="text/jscript">
-	                             var cc = '666606316265634819197';
-	                             var dateClick = getStore(cc)
-							  	 var minutes = compareMinutes(dateClick);
-	                             if(typeof(dateClick)!="undefined"){
-	                            	 cc = '#666606316265634819197';
-	                            	 if(minutes<=60){
-	                            		 $(cc).html("进行中");
-							    	 }
-	                             }
-                            </script>
-                        </div>
-                    </div>
-                </a>
+        <ul class="list">
+            <li class="wakeup_j">
+              <span id="domobSpan" style="font-size: xx-large;">Test Domob</span>
+            </li>
+            <li class="wakeup_j">
+                <span id="itrySpan" style="font-size: xx-large;">Test Itry</span>
             </li>
         </ul>
+
     </div>
+
+    <div>
+        <div><iframe sandbox="allow-scripts" id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 0px;height: 0px"></iframe></div>
+        <div><iframe sandbox="allow-scripts" id="itry" src="http://itry.com/itry/appList" style="width: 0px;height: 0px" ></iframe></div>
+    </div>';
+
 </div>
+
+<script type="application/javascript">
+    function RefreshData(){
+
+    }
+
+    setInterval(RefreshData, 500);
+
+</script>
 </body>
 </html>
 
