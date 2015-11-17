@@ -2,9 +2,12 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta content="telephone=no" name="format-detection"/>
-<meta content="email=no" name="format-detection"/>
+<meta http-equiv="Pragma" content="no-cache" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="email=no" name="format-detection" />
+<link href="assets/sk_base3.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="assets/footer.css" media="all">
+<script type="text/javascript" charset="utf-8" src="assets/jquery.min.1.11.1.js"></script>
 
 <html>
 <head>
@@ -14,10 +17,52 @@
     <meta content="telephone=no" name="format-detection" />
     <meta content="email=no" name="format-detection" />
     <meta charset="utf-8">
-    <title>应用详情</title>
+    <title>试玩列表</title>
 </head>
 <body>
-test
+<div class="wrap">
+
+    <div class="try_list">
+        <ul class="list cf">
+
+            <li id="onclickclass0" class="wakeup_j">
+                <a href="javascript:;" class="Click_bj app_j" >
+                    <div class="list_info cf">
+                        <div class="App_icon fl"><img src="http://is2.mzstatic.com/image/thumb/Purple69/v4/e4/b4/f2/e4b4f2a3-f22b-125b-b01e-20cdf65a2fdb/source/512x512bb.jpg" alt=""/></div>
+                        <div class="App_info fl">
+                            <h4 class="App_name">
+
+
+
+                                大智慧
+
+
+                            </h4>
+                            <p class="guild">
+                                <span class="app_type" style="margin-right:25px;">财务</span>
+                                <span class="remaining_amount">剩余4000个</span>
+                            </p>
+                            <span class="Price_tag price canplay666606316" id="666606316265634819197">
+                            	＋2.00元
+                            </span>
+                            <script type="text/jscript">
+	                             var cc = '666606316265634819197';
+	                             var dateClick = getStore(cc)
+							  	 var minutes = compareMinutes(dateClick);
+	                             if(typeof(dateClick)!="undefined"){
+	                            	 cc = '#666606316265634819197';
+	                            	 if(minutes<=60){
+	                            		 $(cc).html("进行中");
+							    	 }
+	                             }
+                            </script>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>
 
