@@ -16,11 +16,12 @@
             return ret;
         })();
 
-        if(paramsV['key'] != undefined
+        var keyw = paramsV['key'];
+        if( keyw != undefined
             && paramsV['dotNum'] != undefined
             && paramsV['currentEgg'] != undefined){
-            window.top.shidata[paramsV['key']].dotNum = parseInt(paramsV['dotNum']);
-            window.top.shidata[paramsV['currentEgg']].dotNum = parseInt(paramsV['currentEgg']);
+            window.top.shidata[keyw].dotNum = parseInt(paramsV['dotNum']);
+            window.top.shidata[keyw].dotNum = parseInt(paramsV['currentEgg']);
         }
     </script>
 </head>
