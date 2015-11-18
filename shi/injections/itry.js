@@ -67,11 +67,16 @@
         if(invertELs.length > 0){
         	invertELs.each(function(i, e){
 
-                var priceEls = $("span.price", e);
-                if(priceEls.length > 0
-                    && priceEls[0].innerHtml == "进行中")
-                    return;
-            
+				try{
+					var priceEls = $("span.price", e);
+					if(priceEls.length > 0){
+						var pid = priceEls[0].id;
+						var dateClick = getStore(pid)
+						if(typeof(dateClick)!="undefined")
+							return
+					}
+				}catch(e){}
+
                 window.eggQuest++;
         		e.onclick();
         	});
