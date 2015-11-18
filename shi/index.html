@@ -60,7 +60,7 @@
     function SetData(keyw, el){
 
         var dotNum = window.shidata[keyw].dotNum % 5;
-        var titleStr = "收获 " + window.shidata[keyw].currentEgg + " 个蛋 ";
+        var titleStr = keyw + "  : 收获 " + window.shidata[keyw].currentEgg + " 个蛋 ";
         for (var i = 0; i < dotNum; i++) {
             titleStr += ".";
         }
