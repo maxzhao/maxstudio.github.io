@@ -34,7 +34,7 @@
                             	if(typeof(dateClick)=="undefined" || minutes>=60){
                             		setStore(val,new Date().getTime());
                             	}
-                            	window.top.shidata["itry"].currentEgg++;
+                            	window.currentEgg++;
                         	}
                         }
                     });
@@ -57,7 +57,7 @@
 		window.queryList = true;	
 		 $.get("/itry/appList?refresh=" + Date.now(), {}, function (back) {
 
-		 	window.top.shidata["itry"].dotNum++;
+			 window.dotNum++;
 
         var doc = $(back);	
         var invertELs = doc.find(".app_j");
@@ -93,8 +93,8 @@
 		window.queryListID = setInterval(getPlayItems, getRandomInt(500, 2000));
 	}
 
-	window.top.shidata["itry"] = {currentEgg:0, dotNum:0};
-
+	window.currentEgg=0;
+	window.dotNum=0;
     window.lockCount = 0;
 	window.queryList = false;
 	window.eggQuest = 0;

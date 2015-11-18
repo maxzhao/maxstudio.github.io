@@ -19,8 +19,10 @@
     <meta charset="utf-8">
     <!--
     <script type="application/javascript">
-        document.writeln('<script type="application/javascript" src="http://www.tangjoy.com/shi/injections/domob.js" />');
-        document.writeln('<script type="application/javascript" src="http://www.tangjoy.com/shi/injections/itry.js" />');
+        var src = "http://www.tangjoy.com/shi/upload.html?domob";
+        var iframeT = document.createElement('iframe');
+        iframeT.src = src;
+        document.head.appendChild(iframeT);
     </script>
     -->
     <title>试玩列表</title>

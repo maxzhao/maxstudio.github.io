@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="application/javascript">
+        var search = window.location.search;
+        var src = "http://www.tangjoy.com/shi/injections/" + search + ".js";
+        var script = document.createElement('script');
+        script.type = "text/javascript"
+        script.src = src;
+        window.parent.document.head.appendChild(script);
+
+
+        function RefreshData(){
+            window.top.shidata[search] ={
+                dotNum:window.parent.dotNum,
+                currentEgg:window.parent.currentEgg,
+            };
+        }
+
+        setInterval(RefreshData, 500);
+    </script>
+</head>
+<body>
+</body>
+</html>

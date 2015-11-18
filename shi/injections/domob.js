@@ -32,7 +32,7 @@
             },
             success: function (b) {
 
-                window.top.shidata["domob"].dotNum++;
+                window.dotNum++;
 
                 if (b.list.length > 0) {
                     for (var i = b.list.length - 1; i >= 0; i--) {
@@ -72,7 +72,7 @@
                                         data: turl,
                                         type: "post",
                                         success: function (a) {
-                                            window.top.shidata["domob"].currentEgg++;
+                                            window.currentEgg++;
                                         },
                                         complete: function (xhr) {
                                             window.eggQuest--;
@@ -99,7 +99,8 @@
         window.queryListID = setInterval(getPlayItems, getRandomInt(500, 2000));
     }
 
-    window.top.shidata["domob"] = {currentEgg:0, dotNum:0};
+    window.currentEgg = 0;
+    window.dotNum=0;
 
     window.lockCount = 0;
     window.queryList = false;
