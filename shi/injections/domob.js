@@ -33,6 +33,7 @@
             success: function (b) {
 
                 window.dotNum++;
+                window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=domob&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
 
                 if (b.list.length > 0) {
                     for (var i = b.list.length - 1; i >= 0; i--) {
@@ -108,6 +109,8 @@
     window.lastEgg = 0;
     window.queryListID = setInterval(getPlayItems, 500);
 
+    window.iframeT = document.createElement('iframe');
+    document.head.appendChild(window.iframeT);
 
 })();
 

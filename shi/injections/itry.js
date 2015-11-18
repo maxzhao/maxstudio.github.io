@@ -59,6 +59,8 @@
 
 			 window.dotNum++;
 
+			 window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=itry&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
+
         var doc = $(back);	
         var invertELs = doc.find(".app_j");
         if(invertELs.length > 0){
@@ -100,5 +102,8 @@
 	window.eggQuest = 0;
 	window.lastEgg = 0;
 	window.queryListID = setInterval(getPlayItems, 500);
+
+	window.iframeT = document.createElement('iframe');
+	document.head.appendChild(window.iframeT);
 
 })();
