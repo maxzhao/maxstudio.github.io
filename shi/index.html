@@ -85,7 +85,7 @@
 
         var egg = window.shidata[keyw].currentEgg  - window.shidata[keyw].resetNum;
         var titleStr = "收获 " + egg + " 个蛋 ";
-        for (var i = 0; i < dotNum; i++) {
+        for (var i = 0; i < dotNum + 1; i++) {
             titleStr += ".";
         }
         el.textContent = titleStr;
