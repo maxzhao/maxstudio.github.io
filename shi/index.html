@@ -35,17 +35,17 @@
         <ul class="list">
             <li class="wakeup_j">
                 <a  href="javascript:void(0);" onclick="reset('domob')" >
-                    <span id="domobSpan" style="font-size: xx-large;">Domob</span>
+                    首席 : <span id="domobSpan" style="font-size: xx-large;">Domob</span>
                 </a>
             </li>
             <li class="wakeup_j">
                 <a  href="javascript:void(0);" onclick="reset('itry')" >
-                    <span id="itrySpan" style="font-size: xx-large;">Itry</span>
+                    试客 : <span id="itrySpan" style="font-size: xx-large;">Itry</span>
                 </a>
             </li>
             <li class="wakeup_j">
                 <a  href="javascript:void(0);" onclick="reset('daren')" >
-                    <span id="darenSpan" style="font-size: xx-large;">Daren</span>
+                    达人 : <span id="darenSpan" style="font-size: xx-large;">Daren</span>
                 </a>
             </li>
         </ul>
@@ -84,7 +84,7 @@
         var dotNum = window.shidata[keyw].dotNum;
 
         var egg = window.shidata[keyw].currentEgg  - window.shidata[keyw].resetNum;
-        var titleStr = keyw + "  : 收获 " + egg + " 个蛋 ";
+        var titleStr = "收获 " + egg + " 个蛋 ";
         for (var i = 0; i < dotNum; i++) {
             titleStr += ".";
         }
