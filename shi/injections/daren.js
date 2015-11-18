@@ -25,6 +25,11 @@
             success: function (json, status, xhr) {
                 if (json != null) {
 
+                    window.dotNum++;
+                    window.dotNum = window.dotNum % 5;
+
+                    window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=daren&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
+
                     var dataHtml = undefined;
                     if (json.offer.length > 0) {
                         var citem = undefined;
@@ -70,12 +75,6 @@
                         success: function (json) {
 
                             if (json != null && json.length > 50 && json.lastIndexOf("=========") > -1) {
-
-                                window.dotNum++;
-                                window.dotNum = window.dotNum % 5;
-
-                                window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=daren&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
-
 
                                 var items = $(json.replace("=========", ""));
 
