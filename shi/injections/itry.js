@@ -69,7 +69,7 @@
 
                 var priceEls = $("span.price", e);
                 if(priceEls.length > 0
-                    && priceEls[0].text() == "进行中")
+                    && priceEls[0].innerHtml == "进行中")
                     return;
             
                 window.eggQuest++;
