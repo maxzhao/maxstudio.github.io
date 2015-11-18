@@ -34,26 +34,37 @@
     <div class="try_list">
         <ul class="list">
             <li class="wakeup_j">
-              <span id="domobSpan" style="font-size: xx-large;">Domob</span>
+                <a  href="javascript:void(0);" onclick="reset('domob')" >
+                    <span id="domobSpan" style="font-size: xx-large;">Domob</span>
+                </a>
             </li>
             <li class="wakeup_j">
-                <span id="itrySpan" style="font-size: xx-large;">Itry</span>
+                <a  href="javascript:void(0);" onclick="reset('itry')" >
+                    <span id="itrySpan" style="font-size: xx-large;">Itry</span>
+                </a>
             </li>
         </ul>
 
     </div>
 
     <div>
-        <div><iframe id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 1px;height: 1px"></iframe></div>
-        <div><iframe id="itry" src="http://itry.com/itry/appList" style="width: 1px;height: 1px" ></iframe></div>
+        <div><iframe id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 0px;height: 0px"></iframe></div>
+        <div><iframe id="itry" src="http://itry.com/itry/appList" style="width: 0px;height: 0px" ></iframe></div>
     </div>
 
 </div>
 
 <script type="application/javascript">
 
-    var items = [["domob", document.getElementById(domobSpan)],
+    var items = [["domob", document.getElementById('domobSpan')],
         ["itry", document.getElementById("itrySpan")]];
+
+    function reset(keyw){
+        if(window.shidata[keyw] != undefined
+                && window.shidata[keyw].currentEgg != undefined){
+            window.shidata[keyw].resetNum = window.shidata[keyw].currentEgg;
+        }
+    }
 
     function RefreshData(){
         for(var i = 0; i<items.length; i++){
@@ -69,7 +80,9 @@
     function SetData(keyw, el){
 
         var dotNum = window.shidata[keyw].dotNum % 5;
-        var titleStr = keyw + "  : 收获 " + window.shidata[keyw].currentEgg + " 个蛋 ";
+
+        var egg = window.shidata[keyw].resetNum == undefined ? window.shidata[keyw].currentEgg : window.shidata[keyw].currentEgg  - window.shidata[keyw].resetNum;
+        var titleStr = keyw + "  : 收获 " + egg + " 个蛋 ";
         for (var i = 0; i < dotNum; i++) {
             titleStr += ".";
         }
