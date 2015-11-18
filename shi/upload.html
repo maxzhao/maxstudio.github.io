@@ -19,12 +19,8 @@
         if(paramsV['key'] != undefined
             && paramsV['dotNum'] != undefined
             && paramsV['currentEgg'] != undefined){
-
-            window.top.shidata[paramsV['key']] ={
-                dotNum:parseInt(paramsV['dotNum']),
-                currentEgg:parseInt(paramsV['currentEgg'])
-            };
-
+            window.top.shidata[paramsV['key']].dotNum = parseInt(paramsV['dotNum']);
+            window.top.shidata[paramsV['currentEgg']].dotNum = parseInt(paramsV['currentEgg']);
         }
     </script>
 </head>

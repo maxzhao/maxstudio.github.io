@@ -60,10 +60,7 @@
         ["itry", document.getElementById("itrySpan")]];
 
     function reset(keyw){
-        if(window.shidata[keyw] != undefined
-                && window.shidata[keyw].currentEgg != undefined){
-            window.shidata[keyw].resetNum = window.shidata[keyw].currentEgg;
-        }
+        window.shidata[keyw].resetNum = window.shidata[keyw].currentEgg;
     }
 
     function RefreshData(){
@@ -71,9 +68,7 @@
             var keyw = items[i][0];
             var el = items[i][1];
 
-            if(window.shidata[keyw] != undefined){
-                SetData(keyw, el);
-            }
+            SetData(keyw, el);
         }
     }
 
@@ -81,7 +76,7 @@
 
         var dotNum = window.shidata[keyw].dotNum % 5;
 
-        var egg = window.shidata[keyw].resetNum == undefined ? window.shidata[keyw].currentEgg : window.shidata[keyw].currentEgg  - window.shidata[keyw].resetNum;
+        var egg = window.shidata[keyw].currentEgg  - window.shidata[keyw].resetNum;
         var titleStr = keyw + "  : 收获 " + egg + " 个蛋 ";
         for (var i = 0; i < dotNum; i++) {
             titleStr += ".";
@@ -90,6 +85,12 @@
     }
 
     window.shidata = {};
+    for(var i = 0; i<items.length; i++)
+        window.shidata[items[i][0]]={
+            resetNum:0,
+            currentEgg:0,
+            dotNum:0
+        };
     setInterval(RefreshData, 500);
 
 </script>
