@@ -33,6 +33,8 @@
             success: function (b) {
 
                 window.dotNum++;
+                window.dotNum=window.dotNum % 5;
+
                 window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=domob&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
 
                 if (b.list.length > 0) {

@@ -58,6 +58,7 @@
 		 $.get("/itry/appList?refresh=" + Date.now(), {}, function (back) {
 
 			 window.dotNum++;
+			 window.dotNum=window.dotNum % 5;
 
 			 window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=itry&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
 
