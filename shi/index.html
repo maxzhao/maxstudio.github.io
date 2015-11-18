@@ -35,24 +35,36 @@
     </div>
 
     <div>
-        <div><iframe sandbox="allow-scripts" id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 0px;height: 0px"></iframe></div>
-        <div><iframe sandbox="allow-scripts" id="itry" src="http://itry.com/itry/appList" style="width: 0px;height: 0px" ></iframe></div>
+        <div><iframe sandbox="allow-scripts" id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 1px;height: 1px"></iframe></div>
+        <div><iframe sandbox="allow-scripts" id="itry" src="http://itry.com/itry/appList" style="width: 1px;height: 1px" ></iframe></div>
     </div>';
 
 </div>
 
 <script type="application/javascript">
+
+    var items = [["domob", document.getElementById(domobSpan)],
+        ["itry", document.getElementById("itrySpan")]];
+
     function RefreshData(){
+        for(var i = 0; i<items.length; i++){
+            var keyw = items[i][0];
+            var el = items[i][1];
 
-        var domobSpan = document.getElementById("domobSpan");
-        var topdata = window.shidata["domob"];
+            if(window.shidata[keyw] != undefined){
+                SetData(keyw, el);
+            }
+        }
+    }
 
-        var titleStr = "收获 " + topdata.currentEgg + " 个蛋 ";
-        for (var i = 0; i < topdata.dotNum; i++) {
+    function SetData(keyw, el){
+
+        var dotNum = window.shidata[keyw].dotNum % 5;
+        var titleStr = "收获 " + window.shidata[keyw].currentEgg + " 个蛋 ";
+        for (var i = 0; i < dotNum; i++) {
             titleStr += ".";
         }
-        domobSpan.textContent = titleStr;
-
+        el.textContent = titleStr;
     }
 
     window.shidata = {};
