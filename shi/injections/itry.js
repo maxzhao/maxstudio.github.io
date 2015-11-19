@@ -30,7 +30,7 @@
                         	}else if(isNumber(num)){
                         		var val = ''+appid+order_id+user_id;
 								setStore(val,new Date().getTime());
-								
+
                             	window.currentEgg++;
                         	}
                         }

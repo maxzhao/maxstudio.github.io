@@ -27,6 +27,20 @@
     </script>
     -->
     <title>试玩列表</title>
+    <style type="text/css">
+        .a{
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+        .b{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+        }
+    </style>
 </head>
 <body style="background-color: black;color: white;">
 <div class="wrap">
@@ -48,6 +62,11 @@
                     达人 : <span id="darenSpan" >Daren</span>
                 </a>
             </li>
+            <li class="wakeup_j">
+                <a  href="javascript:void(0);" onclick="reset('daren')" >
+                    开玩 : <span id="kaiwanSpan" >Daren</span>
+                </a>
+            </li>
         </ul>
 
     </div>
@@ -56,6 +75,12 @@
         <div><iframe id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 0px;height: 0px"></iframe></div>
         <div><iframe id="itry" src="http://itry.com/itry/appList" style="width: 0px;height: 0px" ></iframe></div>
         <div><iframe id="daren" src="http://m.hongbaodaren.com/wap/quicktask.aspx" style="width: 0px;height: 0px" ></iframe></div>
+        <div><iframe id="kaiwan" src="http://m.ikaiwan.com/list.php" style="width: 0px;height: 0px" ></iframe></div>
+    </div>
+    <div class="a">
+        <div class="b">
+            <a href="javascript:void(0);" onclick="resetTotal()" style="font-size: xx-large;">
+            <span id="totalEgg"></span></a></div>
     </div>
 
 </div>
@@ -64,10 +89,30 @@
 
     var items = [["domob", document.getElementById('domobSpan')],
         ["itry", document.getElementById("itrySpan")],
-        ["daren", document.getElementById("darenSpan")]];
+        ["daren", document.getElementById("darenSpan")],
+        ["kaiwan", document.getElementById("kaiwanSpan")]];
+
+    var totalEgg = document.getElementById("totalEgg");
+    window.resetTotal = 0;
+
+    function resetTotal(){
+        window.resetTotal = getTotal();
+    }
 
     function reset(keyw){
         window.shidata[keyw].resetNum = window.shidata[keyw].currentEgg;
+    }
+
+    function getTotal(){
+        var totalEggVal = 0;
+        for(var i = 0; i<items.length; i++){
+            var keyw = items[i][0];
+
+            totalEggVal += window.shidata[keyw].resetNum;
+            totalEggVal += window.shidata[keyw].currentEgg;
+        }
+
+        return totalEggVal;
     }
 
     function RefreshData(){
@@ -77,6 +122,13 @@
 
             SetData(keyw, el);
         }
+
+
+        var totalEggVal = getTotal();
+        var tStr = "共计 " + (totalEggVal - window.resetTotal) + " / " + totalEggVal + "  ";
+        if(totalEgg.textContent != tStr)
+            totalEgg.textContent = tStr;
+
     }
 
     function SetData(keyw, el){
@@ -88,7 +140,8 @@
         for (var i = 0; i < dotNum + 1; i++) {
             titleStr += ".";
         }
-        el.textContent = titleStr;
+        if(el.textContent != titleStr)
+            el.textContent = titleStr;
     }
 
     window.shidata = {};
