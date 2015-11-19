@@ -60,6 +60,7 @@ function getclicktaskinfo() {
         success: function (json) {
             if (json.success == "false" )
             {
+                // 实验是可以多任务的 ???
                 if (json.message == "giveuptask") {//含有其他未完成的任务
                     if (confirm("不可以同时执行多个任务哦，要放弃之前的全部任务吗？")) {//放弃之前所有任务
                         giveUpAllTask();
@@ -193,7 +194,7 @@ function getclicktaskinfo() {
 
                                 items.remove();
 
-                                // 同步查询info
+                                // 同步查询info ***** 支持多抢
                                 // info 中有任务执行时,退出
                                 // 通过info筛选合适任务
                                 // 请求
