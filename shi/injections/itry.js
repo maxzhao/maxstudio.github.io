@@ -29,11 +29,8 @@
                         	if(num=="-1"){
                         	}else if(isNumber(num)){
                         		var val = ''+appid+order_id+user_id;
-                            	var dateClick = getStore(val); //开始时间
-                        		var minutes = compareMinutes(dateClick);
-                            	if(typeof(dateClick)=="undefined" || minutes>=60){
-                            		setStore(val,new Date().getTime());
-                            	}
+								setStore(val,new Date().getTime());
+								
                             	window.currentEgg++;
                         	}
                         }
