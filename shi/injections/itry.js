@@ -68,8 +68,9 @@
 					var priceEls = $("span.price", e);
 					if(priceEls.length > 0){
 						var pid = priceEls[0].id;
+						var money = parseInt(priceEls[0].textContent.replace('+', '').replace('元',''));
 						var dateClick = getStore(pid)
-						if(typeof(dateClick)!="undefined")
+						if(typeof(dateClick)!="undefined" || money < 1)
 							return
 					}
 				}catch(e){}

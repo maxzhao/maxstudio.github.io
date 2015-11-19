@@ -40,8 +40,12 @@
                 if (b.list.length > 0) {
                     for (var i = b.list.length - 1; i >= 0; i--) {
                         var task = b.list[i];
+                        var restNum = 0;
+                        try{
+                            restNum = parseInt(restNum.replace('+', ''));
+                        }catch(e){};
                         if (task.type != 3
-                            && !task.received && task.restNum > 0) {
+                            && !task.received && restNum > 0 && task.price >= 1) {
 
                             window.eggQuest++;
 
