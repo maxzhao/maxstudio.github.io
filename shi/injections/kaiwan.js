@@ -1,5 +1,7 @@
 (function(){
 
+    var takeFlags = {};
+
     function getPlayItems(){
 
         if ((window.queryList || window.eggQuest > 0)
@@ -31,14 +33,19 @@
                 try{ numL = parseInt(numLStr); }catch(e){}
                 try{ money = parseFloat(moneyStr.replace("元", "").replace("+","")); }catch(e){}
 
+                var aid = e.children("input[name='id']").val();
+                var aname = e.children(".task_info").children(".task_title").text();
+
+                if(takeFlags[aid] != undefined && !takeFlags[aid].done && takeFlags[aid].taking)
+                    takeFlags[aid].restNum++;
+
                 if(numLStr != undefined
                     && numL > 0
                     && moneyStr != undefined
-                    && money >= 1){
-
-                    var aid = e.children("input[name='id']").val();
-                    var aname = e.children(".task_info").children(".task_title").text();
-
+                    && money >= 1
+                    && (takeFlags[aid] == undefined
+                        || (!takeFlags[aid].done && takeFlags[aid].taking && takeFlags[aid].restNum > 5))
+                ){
                     ctasks.push({aid:aid, aname:aname, money:money, numL:numL});
                 }
             });
@@ -50,6 +57,9 @@
             if(ctasks.length > 0){
 
                 ctasks.forEach(function(item, index){
+
+                    takeFlags[item.aid] = {taking:true, done:false,  restNum:0};
+
                     window.eggQuest++;
                     var data = { "appname": item.aname, "app_id": item.aid};
                     $.post(
@@ -59,10 +69,12 @@
                             if (res.code == 200) {
                                 window.currentEgg++;
                             }
+                            takeFlags[item.aid].done = true;
                         },
                         "json"
                     ).always(function() {
                             window.eggQuest--;
+                            takeFlags[item.aid].taking = false;
                         });
 
                 })
