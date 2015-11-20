@@ -71,7 +71,7 @@
         ["daren", "达人", {url:"http://m.hongbaodaren.com/wap/quicktask.aspx"}],
         ["kaiwan", "开玩", {url:"http://m.ikaiwan.com/list.php"}],
         ["qianka", "钱咖", {url:"http://m.qianka.com/fe/task/timed/list"}],
-        ["pp", "P$nbsp;P$nbsp;", {url:"http://pphongbao.com/#!//index.php/fasttask/index"}]
+        ["pp", "P&nbsp;P&nbsp;", {url:"http://pphongbao.com/#!//index.php/fasttask/index"}]
     ];
 
 
@@ -110,7 +110,7 @@
                     + lable + ' : <span id="'+keyw+'Span" ></span></a></li>')
             iframelist.append('<iframe id="'+keyw+'" src="'+url+'" style="width: 0px;height: 0px" ></iframe>');
 
-            items.push([keyw, infolist.children('#'+keyw+'Span')]);
+            items.push([keyw, infolist.children('#'+keyw+'Span')[0]]);
         }
 
 
