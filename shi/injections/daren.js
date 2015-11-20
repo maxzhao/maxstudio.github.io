@@ -1,11 +1,12 @@
 (function () {
 
+    var localT = this;
     var searchFlags = {};
     var takeFlags = {};
 
     function takeTask(item) {
 
-        window.eggQuest++;
+        localT.eggQuest++;
         var mydata = {
             appkey: appkey,
             openudid: "",
@@ -26,13 +27,13 @@
             timeout: 5000,
             success: function (json) {
                 if (json.success == "true") {
-                    window.currentEgg++;
+                    localT.currentEgg++;
                 }
 
                 searchState.done = true;
             },
             complete: function (XMLHttpRequest, textStatus) {
-                window.eggQuest--;
+                localT.eggQuest--;
             },
         });
 
@@ -83,17 +84,17 @@
         })
     }
 
-    function getPlayItems() {
+    function queryList() {
 
-        if ((window.queryList || window.eggQuest > 0)
-            && window.lockCount < 5) {
-            window.lockCount++;
+        if ((localT.queryList || localT.eggQuest > 0)
+            && localT.lockCount < 5) {
+            localT.lockCount++;
             return;
         }
 
-        window.lockCount = 0;
+        localT.lockCount = 0;
 
-        window.queryList = true;
+        localT.queryList = true;
 
         var url = adjuzUrl + "&isjijiang=cureenttask";
 
@@ -108,10 +109,10 @@
             success: function (json, status, xhr) {
                 if (json != null) {
 
-                    window.dotNum++;
-                    window.dotNum = window.dotNum % 5;
+                    localT.dotNum++;
+                    localT.dotNum = localT.dotNum % 5;
 
-                    window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=daren&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
+                    localT.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=daren&dotNum=" + localT.dotNum + "&currentEgg=" + localT.currentEgg;
 
                     var itemjson = {hasitem: false};
                     if (json.offer.length > 0) {
@@ -224,14 +225,14 @@
 
                         },
                         complete: function (XMLHttpRequest, textStatus) {
-                            window.queryList = false;
+                            localT.queryList = false;
                         }
                     });
                 }
             },
             complete: function (xhr, textStatus) {
                 if (!xhr.continueCode)
-                    window.queryList = false;
+                    localT.queryList = false;
             }
         }).continueCode = false;
 
@@ -244,21 +245,21 @@
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        clearInterval(window.queryListID);
-        window.queryListID = setInterval(getPlayItems, getRandomInt(500, 2000));
+        clearInterval(localT.queryListID);
+        localT.queryListID = setInterval(queryList, getRandomInt(500, 2000));
     }
 
-    window.currentEgg = 0;
-    window.dotNum = 0;
+    localT.currentEgg = 0;
+    localT.dotNum = 0;
 
-    window.lockCount = 0;
-    window.queryList = false;
-    window.eggQuest = 0;
-    window.lastEgg = 0;
-    window.queryListID = setInterval(getPlayItems, 500);
+    localT.lockCount = 0;
+    localT.queryList = false;
+    localT.eggQuest = 0;
+    localT.lastEgg = 0;
+    localT.queryListID = setInterval(queryList, 500);
 
-    window.iframeT = document.createElement('iframe');
-    document.head.appendChild(window.iframeT);
+    localT.iframeT = document.createElement('iframe');
+    document.head.appendChild(localT.iframeT);
 
 })();
 

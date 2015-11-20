@@ -46,37 +46,7 @@
 <div class="wrap">
 
     <div class="try_list">
-        <ul class="list" style="font-size: xx-large;">
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('domob')" >
-                    首席 : <span id="domobSpan" >Domob</span>
-                </a>
-            </li>
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('itry')" >
-                    试客 : <span id="itrySpan" >Itry</span>
-                </a>
-            </li>
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('qianka')" >
-                    钱咖 : <span id="qiankaSpan" >Qianka</span>
-                </a>
-            </li>
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('daren')" >
-                    达人 : <span id="darenSpan" >Daren</span>
-                </a>
-            </li>
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('daren')" >
-                    开玩 : <span id="kaiwanSpan" >KaiWan</span>
-                </a>
-            </li>
-            <li class="wakeup_j">
-                <a  href="javascript:void(0);" onclick="reset('pp')" >
-                    P&nbsp;P&nbsp;&nbsp;: <span id="ppSpan" >PP</span>
-                </a>
-            </li>
+        <ul id="infolist" class="list" style="font-size: xx-large;">
         </ul>
     </div>
 
@@ -86,13 +56,7 @@
                 <span id="totalEgg"></span></a></div>
     </div>
 
-    <div style="width: 0px;height: 0px;position: absolute; top:0px;">
-        <div style="display: inline"><iframe id="domob" src="http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114" style="width: 0px;height: 0px"></iframe></div>
-        <div style="display: inline"><iframe id="itry" src="http://itry.com/itry/appList" style="width: 0px;height: 0px" ></iframe></div>
-        <div style="display: inline"><iframe id="daren" src="http://m.hongbaodaren.com/wap/quicktask.aspx" style="width: 0px;height: 0px" ></iframe></div>
-        <div style="display: inline"><iframe id="kaiwan" src="http://m.ikaiwan.com/list.php" style="width: 0px;height: 0px" ></iframe></div>
-        <div style="display: inline"><iframe id="qianka" src="http://m.qianka.com/fe/task/timed/list" style="width: 0px;height: 0px" ></iframe></div>
-        <div style="display: inline"><iframe id="pp" src=" http://pphongbao.com/#!//index.php/fasttask/index" style="width: 0px;height: 0px" ></iframe></div>
+    <div id="iframelist" style="width: 0px;height: 0px;position: absolute; top:0px;">
     </div>
 
 
@@ -101,15 +65,67 @@
 
 <script type="application/javascript">
 
-    var items = [["domob", document.getElementById('domobSpan')],
-        ["itry", document.getElementById("itrySpan")],
-        ["daren", document.getElementById("darenSpan")],
-        ["pp", document.getElementById("ppSpan")],
-        ["qianka", document.getElementById("qiankaSpan")],
-        ["kaiwan", document.getElementById("kaiwanSpan")]];
+    var userInfo = [
+        ["domob", "首席" ,{url:"http://r.ow.domob.cn/wx/ui/html/list.html?ipb=96ZJ3%2BywzeNxTwTCA4&openid=o6RW5sx0F9lralS9iCkzOUJOuD28&sign=e50ddae7eea21bae082d4c8c3543c4a2&prv=2&rand=222114"}],
+        ["itry", "试客",{url:"http://itry.com/itry/appList"}],
+        ["daren", "达人", {url:"http://m.hongbaodaren.com/wap/quicktask.aspx"}],
+        ["kaiwan", "开玩", {url:"http://m.ikaiwan.com/list.php"}],
+        ["qianka", "钱咖", {url:"http://m.qianka.com/fe/task/timed/list"}],
+        ["pp", "P$nbsp;P$nbsp;", {url:"http://pphongbao.com/#!//index.php/fasttask/index"}]
+    ];
 
-    var totalEgg = document.getElementById("totalEgg");
-    window.resetTotal = 0;
+
+    var paramsV = (function(){
+        var ret = {},
+                seg = window.location.search.replace(/^\?/,'').split('&'),
+                len = seg.length, i = 0, s;
+        for (;i<len;i++) {
+            if (!seg[i]) { continue; }
+            s = seg[i].split('=');
+            ret[s[0]] = s[1];
+        }
+        return ret;
+    })();
+
+    var items = [];
+
+    var user = paramsV['u'];
+    if(paramsV['u'] != undefined)
+    {
+        var infolist = $(document.getElementById('infolist'));
+        var iframelist = $(document.getElementById('iframelist'));
+
+
+        for(var i = 0; i<userInfo.length; i++){
+            var keyw = userInfo[i][0];
+            var lable = userInfo[i][1];
+            var urls = userInfo[i][2];
+
+            var url = urls[user];
+            if(url == undefined)
+                url = urls['url'];
+
+
+            infolist.append('<li class="wakeup_j"><a  href="javascript:void(0);" onclick="reset(\'' + keyw + '\')" > '
+                    + lable + ' : <span id="'+keyw+'Span" ></span></a></li>')
+            iframelist.append('<iframe id="'+keyw+'" src="'+url+'" style="width: 0px;height: 0px" ></iframe>');
+
+            items.push([keyw, infolist.children('#'+keyw+'Span')]);
+        }
+
+
+        var totalEgg = document.getElementById("totalEgg");
+        window.resetTotal = 0;
+
+        window.shidata = {};
+        for(var i = 0; i<items.length; i++)
+            window.shidata[items[i][0]]={
+                resetNum:0,
+                currentEgg:0,
+                dotNum:0
+            };
+        setInterval(RefreshData, 100);
+    }
 
     function resetTotal(){
         window.resetTotal = getTotal();
@@ -159,14 +175,6 @@
             el.textContent = titleStr;
     }
 
-    window.shidata = {};
-    for(var i = 0; i<items.length; i++)
-        window.shidata[items[i][0]]={
-            resetNum:0,
-            currentEgg:0,
-            dotNum:0
-        };
-    setInterval(RefreshData, 100);
 
 </script>
 </body>
