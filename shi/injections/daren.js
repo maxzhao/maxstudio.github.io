@@ -128,6 +128,13 @@
                             ) {
                                 itemjson.hasitem = true;
                                 itemjson[item.adid] = item;
+
+                                // hack for 付费
+                                if(item.ad_name.contains('（付费）')){
+                                    searchFlags[item.adid] = {
+                                        rstate: 0, issearch: true, searching: false, tryNum: 0
+                                    };
+                                }
                             }
 
                         }
