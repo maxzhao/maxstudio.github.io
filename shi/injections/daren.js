@@ -1,110 +1,87 @@
 (function () {
 
-//放弃所有任务
-function giveUpAllTask() {
-    var mydata = {
-        cmd: "giveupalltask",
-        appkey: appkey,
-        idfa: idfa,
-        adid: adid,
-        uuid: uuid,
-        version: 5,
-        checksum: quickgiveupallchecksum
-    };
-    $.ajax({
-        async: true,
-        url: "" + service + "ashx/Quick.ashx",
-        type: 'get',
-        dataType: 'jsonp',
-        jsonp: 'jsonpcallback',
-        data: mydata,
-        timeout: 5000,
-        beforeSend: function () { },
-        success: function (json) {
+    var searchFlags = {};
+    var takeFlags = {};
 
-            if (json.success == "true") {
-                alert("成功放弃");
-                return;
-            }
-            else {
-                alert("放弃失败 请联系客服");
-                return;
-            }
-        },
-        complete: function (XMLHttpRequest, textStatus) { },
-        error: function (xhr) {
-            alert(netWorkError)
-        }
-    })
-}
+    function takeTask(item) {
+
+        window.eggQuest++;
+        var mydata = {
+            appkey: appkey,
+            openudid: "",
+            sessionid: item.quickstartsessionid,
+            idfa: idfa,
+            adid: citem.adid,
+            uuid: uuid,
+            version: 6,
+            checksum: item.quickstartchecksum
+        };
+        $.ajax({
+            async: true,
+            url: "" + service + "ashx/QuickClick.ashx",
+            type: 'get',
+            dataType: 'jsonp',
+            jsonp: 'jsonpcallback',
+            data: mydata,
+            timeout: 5000,
+            success: function (json) {
+                if (json.success == "true") {
+                    window.currentEgg++;
+                }
+
+                searchState.done = true;
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                window.eggQuest--;
+            },
+        });
+
+    }
+
 //获取任务详细信息
-function getclicktaskinfo() {
-    var mydata = {
-        cmd: "getclicktaskinfo",
-        appkey: appkey,
-        idfa: idfa,
-        adid: adid,
-        uuid: uuid,
-        version: 5,
-        checksum: quickinfochecksum
-    };
-    $.ajax({
-        async: true,
-        url: "http://api2.adjuz.com/TaskClickInfo/getindex",
-        type: 'get',
-        dataType: 'jsonp',
-        jsonp: 'jsonpcallback',
-        data: mydata,
-        timeout: 5000,
-        beforeSend: function () { },
-        success: function (json) {
-            if (json.success == "false" )
-            {
-                // 实验是可以多任务的 ???
-                if (json.message == "giveuptask") {//含有其他未完成的任务
-                    if (confirm("不可以同时执行多个任务哦，要放弃之前的全部任务吗？")) {//放弃之前所有任务
-                        giveUpAllTask();
-                    }
-                    return;
-                }
-                else {//其他错误
-                    alert("用户验证失败");
-                    return;
-                }
-            }
-            if (adid == "10378" || adid == "10387") {
-            }
-            else {
-            }
+    function getTaskInfo() {
+        searchFlags[adid] = {
+            rstate: 0, issearch: false, searching: true, tryNum: 0, done: false
+        };
 
-            adStopMinute = json.stopminute;//记录任务试玩时间
-            adclickTime=json.clickgettime;//记录任务拷贝时间
-            $("#task_start_success_text").hide();
-            $("#adlogo_box").attr('src', json.logo);
-            $("#adname_box").html(json.name);
-            if (json.desc != null && json.desc != "") {
-                $("#addesc_box").html(json.desc.replace("\\n", "<br>").replace("\\n", "<br>").replace("\\n", "<br>"));
+        var mydata = {
+            cmd: "getclicktaskinfo",
+            appkey: appkey,
+            idfa: idfa,
+            adid: adid,
+            uuid: uuid,
+            version: 5,
+            checksum: quickinfochecksum
+        };
+        $.ajax({
+            async: true,
+            url: "http://api2.adjuz.com/TaskClickInfo/getindex",
+            type: 'get',
+            dataType: 'jsonp',
+            jsonp: 'jsonpcallback',
+            data: mydata,
+            timeout: 5000,
+            beforeSend: function () {
+            },
+            success: function (json) {
+
+                var rstate = 0;
+                if (json.success == "false") {
+                    if (json.message == "giveuptask")
+                        rstate = 2;
+                    else
+                        rstate = 1;
+                }
+
+                searchFlags[adid].rstate = rstate;
+                searchFlags[adid].issearch = json.issearch;
+
+            },
+            complete: function (XMLHttpRequest, textStatus) {
+                searchFlags[adid].searching = false;
             }
-            if (json.issearch == true) {
-                //有关键字隐藏第一步按钮
-            } else {
-                //无关键字显示第一步按钮
-            } if (json.status == 1) {
-                //'任务抢到了，请在' + json.minute + '分钟内完成');
-                window.currentEgg++;
-                UpdateTime(json.clickgettime, json.minute);
-            } else if (json.status == 2) {
-                //$("#task_start_success_text").html("任务已超时，请重新抢做")
-            }
-            else {
-            }
-        },
-        complete: function (XMLHttpRequest, textStatus) { },
-        error: function (xhr) {
-            alert(netWorkError)
-        }
-    })
-}
+        })
+    }
 
     function getPlayItems() {
 
@@ -136,7 +113,7 @@ function getclicktaskinfo() {
 
                     window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=daren&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
 
-                    var itemjson = { hasitem: false};
+                    var itemjson = {hasitem: false};
                     if (json.offer.length > 0) {
                         for (var i = 0; i < json.offer.length; i++) {
                             var item = json.offer[i];
@@ -177,7 +154,7 @@ function getclicktaskinfo() {
 
                                     var adid = e.data('adid');
                                     var item = itemjson[adid];
-                                    if(item != undefined){
+                                    if (item != undefined) {
                                         if (e.data('isputpaytask') != "0"
                                             && e.data('finished') != "1"
                                             && e.data('finished') != "2") {
@@ -186,7 +163,7 @@ function getclicktaskinfo() {
                                             item.quickstartsessionid = e.data('quickstartsessionid');
                                             item.quickgiveupallchecksum = e.data('quickgiveupallchecksum');
 
-                                        }else
+                                        } else
                                             delete itemjson[adid];
                                     }
 
@@ -199,48 +176,49 @@ function getclicktaskinfo() {
                                 // 通过info筛选合适任务
                                 // 请求
 
-                                var citem = undefined;
                                 Object.keys(itemjson).forEach(function (item, index) {
-                                     if (citem != undefined) {
-                                         if (parseFloat(item.ad_point) > parseFloat(citem.ad_point)
-                                         || (parseFloat(item.ad_point) == parseFloat(citem.ad_point)
-                                         && parseFloat(item.surplusnum) > parseFloat(citem.surplusnum)))
-                                         citem = item;
-                                     } else
-                                        citem = item;
-                                });
 
-                                if(citem != undefined){
-                                    window.eggQuest++;
-                                        var mydata = {
-                                            appkey: appkey,
-                                            openudid: "",
-                                            sessionid: citem.quickstartsessionid,
-                                            idfa: idfa,
-                                            adid: citem.adid,
-                                            uuid: uuid,
-                                            version: 6,
-                                            checksum: citem.quickstartchecksum
-                                        };
-                                        $.ajax({
-                                            async: true,
-                                            url: "" + service + "ashx/QuickClick.ashx",
-                                            type: 'get',
-                                            dataType: 'jsonp',
-                                            jsonp: 'jsonpcallback',
-                                            data: mydata,
-                                            timeout: 5000,
-                                            success: function (json) {
-                                                if (json.success == "true") {
-                                                    window.currentEgg++;
+                                    if (item.quickstartchecksum != undefined) {
+
+                                        var searchState = searchFlags[item.adid];
+                                        if (searchState == undefined
+                                            || (searchState.searching && searchState.tryNum > 5))
+                                            getTaskInfo(item);
+                                        else {
+
+                                            if (searchState.searching)
+                                                searchState.tryNum++;
+                                            else {
+
+                                                if (searchState.rstate == 0
+                                                    && !searchState.issearch) {
+
+                                                    if (takeFlags[item.adid] == undefined)
+                                                        takeFlags[item.adid] = {done: false, taking: true, tryNum: 0};
+
+                                                    var takeFlag = takeFlags[item.adid];
+
+                                                    if (!takeFlag.done) {
+                                                        if (takeFlag.taking)
+                                                            takeFlag.tryNum++;
+
+                                                        if (!takeFlag.taking
+                                                            || takeFlag.tryNum > 5) {
+                                                            takeFlag.tryNum = 0;
+
+                                                            takeTask(item);
+                                                        }
+                                                    }
+
                                                 }
-                                            },
-                                            complete: function (XMLHttpRequest, textStatus) {
-                                                window.eggQuest--;
-                                            },
-                                        });
-                                }
 
+                                            }
+
+
+                                        }
+                                    }
+
+                                });
 
                             }
 
