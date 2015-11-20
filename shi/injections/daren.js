@@ -1,7 +1,6 @@
 (function () {
 
     var localT = this;
-    var searchFlags = {};
     var takeFlags = {};
 
     function takeTask(item) {
@@ -38,48 +37,6 @@
             },
         });
 
-    }
-
-//获取任务详细信息
-    function getTaskInfo(item) {
-        searchFlags[item.adid] = {
-            rstate: 0, issearch: false, searching: true, tryNum: 0
-        };
-
-        var mydata = {
-            cmd: "getclicktaskinfo",
-            appkey: appkey,
-            idfa: idfa,
-            adid: item.adid,
-            uuid: uuid,
-            version: 5,
-            checksum: item.quickinfochecksum
-        };
-        $.ajax({
-            async: true,
-            url: "http://api2.adjuz.com/TaskClickInfo/getindex",
-            type: 'get',
-            dataType: 'jsonp',
-            jsonp: 'jsonpcallback',
-            data: mydata,
-            timeout: 5000,
-            success: function (json) {
-
-                var rstate = 0;
-                if (json.success == "false") {
-                    if (json.message == "giveuptask")
-                        rstate = 2;
-                    else
-                        rstate = 1;
-                }else{
-                    searchFlags[item.adid].issearch = json.issearch;
-                }
-                searchFlags[item.adid].rstate = rstate;
-            },
-            complete: function (XMLHttpRequest, textStatus) {
-                searchFlags[item.adid].searching = false;
-            }
-        })
     }
 
     function queryList() {
@@ -120,21 +77,11 @@
                             if (parseFloat(item.status) == 0
                                 && parseFloat(item.ad_point) >= 1
                                 && parseFloat(item.surplusnum) > 0
-                                && (searchFlags[item.adid] == undefined
-                                    || searchFlags[item.adid].searching
-                                    || searchFlags[item.adid].issearch)
                                 && (takeFlags[item.adid] == undefined
                                     || !takeFlags[item.adid].done)
                             ) {
                                 itemjson.hasitem = true;
                                 itemjson[item.adid] = item;
-
-                                // hack for 付费
-                                if(item.ad_name.indexOf('（付费）') != -1){
-                                    searchFlags[item.adid] = {
-                                        rstate: 0, issearch: true, searching: false, tryNum: 0
-                                    };
-                                }
                             }
 
                         }
@@ -188,43 +135,24 @@
                                     var item = itemjson[key];
                                     if (item.quickstartchecksum != undefined) {
 
-                                        var searchState = searchFlags[item.adid];
-                                        if (searchState == undefined
-                                            || (searchState.searching && searchState.tryNum > 5))
-                                            getTaskInfo(item);
-                                        else {
+                                        if (takeFlags[item.adid] == undefined)
+                                            takeFlags[item.adid] = {done: false, taking: false, tryNum: 0};
 
-                                            if (searchState.searching)
-                                                searchState.tryNum++;
-                                            else {
+                                        var takeFlag = takeFlags[item.adid];
 
-                                                if (searchState.rstate == 0
-                                                    && searchState.issearch) {
+                                        if (!takeFlag.done) {
 
-                                                    if (takeFlags[item.adid] == undefined)
-                                                        takeFlags[item.adid] = {done: false, taking: false, tryNum: 0};
+                                            if (takeFlag.taking)
+                                                takeFlag.tryNum++;
 
-                                                    var takeFlag = takeFlags[item.adid];
+                                            if (!takeFlag.taking
+                                                || takeFlag.tryNum > 5) {
+                                                takeFlag.tryNum = 0;
 
-                                                    if (!takeFlag.done) {
-
-                                                        if (takeFlag.taking)
-                                                            takeFlag.tryNum++;
-
-                                                        if (!takeFlag.taking
-                                                            || takeFlag.tryNum > 5) {
-                                                            takeFlag.tryNum = 0;
-
-                                                            takeTask(item);
-                                                        }
-                                                    }
-
-                                                }
-
+                                                takeTask(item);
                                             }
-
-
                                         }
+
                                     }
 
                                 });
