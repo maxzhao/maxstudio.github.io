@@ -12,7 +12,7 @@
             openudid: "",
             sessionid: item.quickstartsessionid,
             idfa: idfa,
-            adid: citem.adid,
+            adid: item.adid,
             uuid: uuid,
             version: 6,
             checksum: item.quickstartchecksum
@@ -30,7 +30,7 @@
                     localT.currentEgg++;
                 }
 
-                searchState.done = true;
+                takeFlags[item.adid].done = true;
             },
             complete: function (XMLHttpRequest, textStatus) {
                 localT.eggQuest--;
@@ -40,19 +40,19 @@
     }
 
 //获取任务详细信息
-    function getTaskInfo() {
-        searchFlags[adid] = {
-            rstate: 0, issearch: false, searching: true, tryNum: 0, done: false
+    function getTaskInfo(item) {
+        searchFlags[item.adid] = {
+            rstate: 0, issearch: false, searching: true, tryNum: 0
         };
 
         var mydata = {
             cmd: "getclicktaskinfo",
             appkey: appkey,
             idfa: idfa,
-            adid: adid,
+            adid: item.adid,
             uuid: uuid,
             version: 5,
-            checksum: quickinfochecksum
+            checksum: item.quickinfochecksum
         };
         $.ajax({
             async: true,
@@ -62,8 +62,6 @@
             jsonp: 'jsonpcallback',
             data: mydata,
             timeout: 5000,
-            beforeSend: function () {
-            },
             success: function (json) {
 
                 var rstate = 0;
@@ -72,14 +70,13 @@
                         rstate = 2;
                     else
                         rstate = 1;
+                }else{
+                    searchFlags[item.adid].issearch = json.issearch;
                 }
-
-                searchFlags[adid].rstate = rstate;
-                searchFlags[adid].issearch = json.issearch;
-
+                searchFlags[item.adid].rstate = rstate;
             },
             complete: function (XMLHttpRequest, textStatus) {
-                searchFlags[adid].searching = false;
+                searchFlags[item.adid].searching = false;
             }
         })
     }
@@ -121,7 +118,12 @@
 
                             if (parseFloat(item.status) == 0
                                 && parseFloat(item.ad_point) >= 1
-                                && parseFloat(item.surplusnum) >= 0
+                                && parseFloat(item.surplusnum) > 0
+                                && (searchFlags[item.adid] == undefined
+                                    || searchFlags[item.adid].searching
+                                    || searchFlags[item.adid].issearch)
+                                && (takeFlags[item.adid] == undefined
+                                    || !takeFlags[item.adid].done)
                             ) {
                                 itemjson.hasitem = true;
                                 itemjson[item.adid] = item;
@@ -153,6 +155,7 @@
 
                                 items.each(function (i, e) {
 
+                                    e = $(e);
                                     var adid = e.data('adid');
                                     var item = itemjson[adid];
                                     if (item != undefined) {
@@ -163,6 +166,7 @@
                                             item.quickstartchecksum = e.data('quickstartchecksum');
                                             item.quickstartsessionid = e.data('quickstartsessionid');
                                             item.quickgiveupallchecksum = e.data('quickgiveupallchecksum');
+                                            item.quickinfochecksum = e.data('quickinfochecksum');
 
                                         } else
                                             delete itemjson[adid];
@@ -172,13 +176,8 @@
 
                                 items.remove();
 
-                                // 同步查询info ***** 支持多抢
-                                // info 中有任务执行时,退出
-                                // 通过info筛选合适任务
-                                // 请求
-
-                                Object.keys(itemjson).forEach(function (item, index) {
-
+                                Object.keys(itemjson).forEach(function (key, index) {
+                                    var item = itemjson[key];
                                     if (item.quickstartchecksum != undefined) {
 
                                         var searchState = searchFlags[item.adid];
@@ -192,14 +191,15 @@
                                             else {
 
                                                 if (searchState.rstate == 0
-                                                    && !searchState.issearch) {
+                                                    && searchState.issearch) {
 
                                                     if (takeFlags[item.adid] == undefined)
-                                                        takeFlags[item.adid] = {done: false, taking: true, tryNum: 0};
+                                                        takeFlags[item.adid] = {done: false, taking: false, tryNum: 0};
 
                                                     var takeFlag = takeFlags[item.adid];
 
                                                     if (!takeFlag.done) {
+
                                                         if (takeFlag.taking)
                                                             takeFlag.tryNum++;
 
