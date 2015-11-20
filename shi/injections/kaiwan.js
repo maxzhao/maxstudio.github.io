@@ -16,31 +16,30 @@
             window.dotNum++;
             window.dotNum=window.dotNum % 5;
 
-            //window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=kaiwan&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
+            window.iframeT.src = "http://www.tangjoy.com/shi/upload.html?key=kaiwan&dotNum=" + window.dotNum + "&currentEgg=" + window.currentEgg;
 
-            var ctask = undefined;
+            var ctasks = [];
 
             var doc = $(back);
             doc.children(".online").each(function(i, e){
 
-                e = $(e);
+               e = $(e);
                var numLStr = e.children(".task_info").children("span.green")[0].textContent;
                var moneyStr = e.children(".task_rewards_active")[0].textContent;
                 var numL = 0;
-                var money = 0;
+                var money = 1;
+                try{ numL = parseInt(numLStr); }catch(e){}
+                try{ money = parseFloat(moneyStr.replace("元", "").replace("+","")); }catch(e){}
+
                 if(numLStr != undefined
-                    &&(numL = parseInt(numLStr)) > 0
+                    && numL > 0
                     && moneyStr != undefined
-                    && (money = parseFloat(moneyStr.replace("元", "").replace("+","")) ) >= 1){
+                    && money >= 1){
 
                     var aid = e.children("input[name='id']").val();
                     var aname = e.children(".task_info").children(".task_title").text();
 
-                    if( ctask == undefined
-                        || money > ctask.money
-                        || (money == ctask.money && numL < ctask.numL)){
-                        ctask = {aid:aid, aname:aname, money:money, numL:numL};
-                    }
+                    ctasks.push({aid:aid, aname:aname, money:money, numL:numL});
                 }
             });
 
@@ -48,23 +47,25 @@
             // 记录申请成功的
             // 自动提交审核
 
-            if(ctask != undefined){
+            if(ctasks.length > 0){
 
-                window.eggQuest++;
-                var data = { "appname": ctask.aname, "app_id": ctask.aid};
-                $.post(
-                    "ajax.php",
-                    data,
-                    function (res) {
-                        if (res.code == 200) {
-                            window.currentEgg++;
-                        }
-                    },
-                    "json"
-                ).always(function() {
-                        window.eggQuest--;
-                    });
+                ctasks.forEach(function(item, index){
+                    window.eggQuest++;
+                    var data = { "appname": item.aname, "app_id": item.aid};
+                    $.post(
+                        "ajax.php",
+                        data,
+                        function (res) {
+                            if (res.code == 200) {
+                                window.currentEgg++;
+                            }
+                        },
+                        "json"
+                    ).always(function() {
+                            window.eggQuest--;
+                        });
 
+                })
             }
 
             doc.remove();

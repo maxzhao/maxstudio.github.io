@@ -27,6 +27,7 @@
             timeout: 5000,
             success: function (json) {
                 if (json.success == "true") {
+
                     localT.currentEgg++;
                 }
 
