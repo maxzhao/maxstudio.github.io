@@ -981,10 +981,10 @@ define("event.target", [], function () {
     }
     ])
 }), define("controllers/timed", ["task.controllers", "websocket"], function (t, e) {
-    console.log("Timed Task List Controller Load!"), t.controller("TimedTaskListCtrl", ["$scope", "$rootScope", "$state", "$api", "$toast", "$timeout", "$q", "$device", function (t, n, i, s, a, o, r, d) {
+    console.log("Timed Task List Controller Load!"), t.controller("TimedTaskListCtrl", ["$scope", "$rootScope", "$state", "$api", "$toast", "$timeout", "$q", "$device", function ($scope, $rootScope, $state, $api, $toast, $timeout, $q, $device) {
         function l() {
-            s.getTimedTaskList().then(function (e) {
-                t.fetched = !0;
+            $api.getTimedTaskList().then(function (e) {
+                $scope.fetched = !0;
                 var n = (new Date).getTime();
                 console.log("api()" + n), console.log("api data", e), !L || x > L.version || n - L.time > 3e5 || !_.isEqual(L.data, e.data) ? (c(e.data), window.cache.set(y, {
                     data: e.data,
@@ -992,7 +992,7 @@ define("event.target", [], function () {
                     time: n
                 })) : console.log("no re-rendering")
             }, function (t) {
-                a.error(t)
+                $toast.error(t)
             })
         }
 
@@ -1012,19 +1012,19 @@ define("event.target", [], function () {
                 return 4 == t.type
             }), function (t) {
                 i += parseFloat(t.reward) + parseFloat(t.exclusive_reward)
-            }), console.log("即将上线任务总金额", i), t.comingTaskTotalReward = parseFloat(i).toFixed(1), t.taskList = n, o(function () {
-                console.log("render()" + (new Date).getTime()), t.$digest()
+            }), console.log("即将上线任务总金额", i), $scope.comingTaskTotalReward = parseFloat(i).toFixed(1), $scope.taskList = n, $timeout(function () {
+                console.log("render()" + (new Date).getTime()), $scope.$digest()
             })
         }
 
         function u(t) {
             if (I)
-                return a.show("频率过高，10秒后重试"), !1;
+                return $toast.show("频率过高，10秒后重试"), !1;
             I = !0, _.delay(function () {
                 I = !1
-            }, E), a.show("争抢任务中..", 31536e6), $ = r.defer(), D = $.promise, D.then(function () {
+            }, E), $toast.show("争抢任务中..", 31536e6), $ = $q.defer(), D = $.promise, D.then(function () {
             }, function (t) {
-                "" != t && a.show(t)
+                "" != t && $toast.show(t)
             });
             var e = (new Date).getTime();
             socket.on("lppa-" + e, function (e) {
@@ -1035,22 +1035,22 @@ define("event.target", [], function () {
         }
 
         function p(e) {
-            s.applyForTimedTask(e.id).then(function (t) {
+            $api.applyForTimedTask(e.id).then(function (t) {
                 var i = t.data;
-                return 1 == i.is_finish ? (a.success(t), o(function () {
-                    n.loaded = !1, l()
+                return 1 == i.is_finish ? ($toast.success(t), $timeout(function () {
+                    $rootScope.loaded = !1, l()
                 }, 1500), !1) : (e.timeout = i.timeout, void v(e))
             }, function (n) {
-                $.reject(""), 5001 == n.code ? o(function () {
-                    a.hide(), t.bindMobileFlag = 1, m(n.message)
-                }, 500) : _.indexOf([5002, 5003, 5004, 5005], n.code) > -1 ? o(function () {
-                    a.hide(), t.failReason = n.message, t.appliedTaskIcon = e.icon;
+                $.reject(""), 5001 == n.code ? $timeout(function () {
+                    $toast.hide(), $scope.bindMobileFlag = 1, m(n.message)
+                }, 500) : _.indexOf([5002, 5003, 5004, 5005], n.code) > -1 ? $timeout(function () {
+                    $toast.hide(), $scope.failReason = n.message, $scope.appliedTaskIcon = e.icon;
                     var i = document.getElementById("modal-no-quota"), s = angular.element(i);
-                    s.addClass("md-show"), o(function () {
+                    s.addClass("md-show"), $timeout(function () {
                         s.removeClass("md-show")
                     }, 1500)
-                }, 500) : o(function () {
-                    a.error(n)
+                }, 500) : $timeout(function () {
+                    $toast.error(n)
                 }, 500)
             })
         }
@@ -1060,14 +1060,14 @@ define("event.target", [], function () {
             socket.on("taskstarted-" + e, function (e) {
                 console.log(e), socket.disconnect(), socket = void 0;
                 var n = 1500;
-                a.show("成功抢得任务，正在跳转", n), o(function () {
+                $toast.show("成功抢得任务，正在跳转", n), $timeout(function () {
                     b(t.id)
                 }, n)
             }), socket.taskStarted(t.id, t.timeout, e)
         }
 
         function g(e) {
-            if (d.isIOS9() && 0 == window.canSupportIOS9) {
+            if ($device.isIOS9() && 0 == window.canSupportIOS9) {
                 var n = angular.element(document.getElementById("modal-upgrade"));
                 return n.addClass("md-show"), window.addEventListener("touchmove", h), !1
             }
@@ -1077,8 +1077,8 @@ define("event.target", [], function () {
                 if (2 == e.status)
                     return socket.disconnect(), socket = void 0, b(e.id), !1;
                 if (z) {
-                    var i = angular.element(document.getElementById("modal-confirm")), l = r.defer(), c = l.promise;
-                    i.addClass("md-show"), window.addEventListener("touchmove", h), t.dismiss = function (t) {
+                    var i = angular.element(document.getElementById("modal-confirm")), l = $q.defer(), c = l.promise;
+                    i.addClass("md-show"), window.addEventListener("touchmove", h), $scope.dismiss = function (t) {
                         l.resolve(t), window.removeEventListener("touchmove", h)
                     }, c.then(function (t) {
                         t && u(e), i.removeClass("md-show")
@@ -1089,28 +1089,28 @@ define("event.target", [], function () {
                 w();
             else {
                 var p = e.id, v = e.gaming_id;
-                s.applyForBettingRights(p, v).then(function (e) {
-                    var n = angular.element(document.getElementById("modal-bet")), i = r.defer(), s = i.promise;
-                    n.addClass("md-show"), window.addEventListener("touchmove", h), t.dismissBet = function (t) {
+                $api.applyForBettingRights(p, v).then(function (e) {
+                    var n = angular.element(document.getElementById("modal-bet")), i = $q.defer(), s = i.promise;
+                    n.addClass("md-show"), window.addEventListener("touchmove", h), $scope.dismissBet = function (t) {
                         i.resolve(t), window.removeEventListener("touchmove", h)
                     }, s.then(function (t) {
                         n.removeClass("md-show"), t && window.location.replace("../bet")
                     })
                 }, function (n) {
                     if (_.indexOf([5001, 5002, 5003, 5004, 5005], n.code) > -1) {
-                        t.failReason = n.message, t.appliedTaskIcon = e.icon;
+                        $scope.failReason = n.message, $scope.appliedTaskIcon = e.icon;
                         var i = document.getElementById("modal-no-quota"), s = angular.element(i);
-                        s.addClass("md-show"), o(function () {
+                        s.addClass("md-show"), $timeout(function () {
                             s.removeClass("md-show")
                         }, 1500)
                     } else
-                        a.error(n)
+                        $toast.error(n)
                 })
             }
         }
 
         function m(e) {
-            t.tips = e, B.addClass("md-show"), window.addEventListener("touchmove", h)
+            $scope.tips = e, B.addClass("md-show"), window.addEventListener("touchmove", h)
         }
 
         function f() {
@@ -1120,8 +1120,8 @@ define("event.target", [], function () {
 
         function k(e) {
             var n = angular.element(document.getElementById("modal-alert2"));
-            e || (e = {}), t.alert_tip = e.tip || "恭喜！任务完成！", t.alert_title = e.title || "", t.alert_price = e.price || "", t.alert_name = e.name || "很好，继续", o(function () {
-                t.$digest(), n.addClass("md-show"), window.addEventListener("touchmove", h)
+            e || (e = {}), $scope.alert_tip = e.tip || "恭喜！任务完成！", $scope.alert_title = e.title || "", $scope.alert_price = e.price || "", $scope.alert_name = e.name || "很好，继续", $timeout(function () {
+                $scope.$digest(), n.addClass("md-show"), window.addEventListener("touchmove", h)
             })
         }
 
@@ -1130,9 +1130,9 @@ define("event.target", [], function () {
         }
 
         function b(t) {
-            d.isIOS9() ? i.go("timed.detailIOS9", {
+            $device.isIOS9() ? $state.go("timed.detailIOS9", {
                 taskId: t
-            }) : i.go("timed.detail", {
+            }) : $state.go("timed.detail", {
                 taskId: t
             })
         }
@@ -1142,20 +1142,20 @@ define("event.target", [], function () {
         }
 
         var y = "QK_TIMEDTASKLIST", x = 1, T = (new Date).getTime(), S = !1, I = !1, E = 1e4;
-        window.socket && (socket.disconnect(), socket = void 0), t.$emit("headerTitleChanged", {
+        window.socket && (socket.disconnect(), socket = void 0), $scope.$emit("headerTitleChanged", {
             headerTitle: "限时任务"
-        }), window.scroll(0, 0), n.loaded = !1, t.isKeyInvalid = !0;
+        }), window.scroll(0, 0), $rootScope.loaded = !1, $scope.isKeyInvalid = !0;
         var A = !1;
-        window.socket = new e, s.getQiankaKeySetting().then(function (e) {
+        window.socket = new e, $api.getQiankaKeySetting().then(function (e) {
             var i = e.data, s = i.websocket_url;
             window.sessionId = i.session_id, window.plist = i.plist, window.releaseVersion = i.release_version, window.localVersion = i.version, window.schemeLoginUrl = i.scheme_login_url, window.canSupportIOS9 = i.can_support_ios9, socket.on("open", function (e) {
-                console.log("钥匙已打开"), t.isKeyInvalid = !1, A = !1, S && (S = !1, f()), o(function () {
-                    t.$digest()
+                console.log("钥匙已打开"), $scope.isKeyInvalid = !1, A = !1, S && (S = !1, f()), $timeout(function () {
+                    $scope.$digest()
                 })
             }), socket.on("close", function (e) {
                 var i = 1;
-                console.log(i + "秒后重新连接"), t.isKeyInvalid = !0, A = !0, n.loaded = !0, o(function () {
-                    t.$digest()
+                console.log(i + "秒后重新连接"), $scope.isKeyInvalid = !0, A = !0, $rootScope.loaded = !0, $timeout(function () {
+                    $scope.$digest()
                 }), _.delay(function () {
                     socket.connect(s)
                 }, 1e3 * i)
@@ -1170,19 +1170,19 @@ define("event.target", [], function () {
                     })
                 }
             }), socket.connect(s)
-        }), t.openQiankaKey = function () {
+        }), $scope.openQiankaKey = function () {
             S = !0, window.location.href = window.schemeLoginUrl
-        }, t.downloadQiankaKey = function () {
+        }, $scope.downloadQiankaKey = function () {
             var t = document.getElementById("modal-upgrade"), e = angular.element(t);
-            e.removeClass("md-show"), window.removeEventListener("touchmove", h), d.isIOS9() ? window.location.replace("../authority/#/install") : window.location.href = window.plist
-        }, t.taskList = [];
+            e.removeClass("md-show"), window.removeEventListener("touchmove", h), $device.isIOS9() ? window.location.replace("../authority/#/install") : window.location.href = window.plist
+        }, $scope.taskList = [];
         var $, D, z = !1, L = window.cache.get(y);
         console.log("cache", L), L && T - L.time < 3e5 && (console.log("默认渲染"), c(L.data)), l();
         var C = angular.element(document.getElementById("modal-task-notice"));
-        t.applyTask = function (e) {
-            return 4 == e.type ? (C.addClass("md-show"), window.addEventListener("touchmove", h), o(function () {
-                t.closeNotice()
-            }, 2e3), !1) : A ? (a.show("钥匙检测中...", 3e3), o(function () {
+        $scope.applyTask = function (e) {
+            return 4 == e.type ? (C.addClass("md-show"), window.addEventListener("touchmove", h), $timeout(function () {
+                $scope.closeNotice()
+            }, 2e3), !1) : A ? ($toast.show("钥匙检测中...", 3e3), $timeout(function () {
                 if (A) {
                     var t = document.getElementById("modal-key-invalid"), n = angular.element(t);
                     n.addClass("md-show"), window.addEventListener("touchmove", h)
@@ -1191,16 +1191,16 @@ define("event.target", [], function () {
             }, 3e3), !1) : void g(e)
         };
         var B = angular.element(document.getElementById("modal-alert"));
-        t.hideAlert = function () {
-            B.removeClass("md-show"), window.removeEventListener("touchmove", h), 1 == t.bindMobileFlag && o(function () {
+        $scope.hideAlert = function () {
+            B.removeClass("md-show"), window.removeEventListener("touchmove", h), 1 == $scope.bindMobileFlag && $timeout(function () {
                 window.location.replace("../user/index.html#/main/bind_mobile/2")
             }, 100)
-        }, t.hideModal = function () {
+        }, $scope.hideModal = function () {
             f()
-        }, t.hideAlert2 = function () {
+        }, $scope.hideAlert2 = function () {
             var t = angular.element(document.getElementById("modal-alert2"));
             t.removeClass("md-show"), window.removeEventListener("touchmove", h)
-        }, t.closeNotice = function () {
+        }, $scope.closeNotice = function () {
             C.removeClass("md-show"), window.removeEventListener("touchmove", h)
         }
     }

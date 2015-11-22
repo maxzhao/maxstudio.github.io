@@ -42,7 +42,7 @@
     function queryList() {
 
         if ((localT.queryList || localT.eggQuest > 0)
-            && localT.lockCount < localT.maxLockCount) {
+            && localT.lockCount < 5) {
             localT.lockCount++;
             return;
         }
