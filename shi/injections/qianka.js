@@ -4,6 +4,8 @@
 
     var services = angular.injector(["task.services"]);
 
+    var delay = 0;
+
     function queryList() {
 
         if ((localT.queryList || localT.eggQuest > 0)
@@ -20,6 +22,13 @@
         services.invoke(function($api){
             $api.getTimedTaskList().then(
                 function(rep){
+
+                    if(rep.code != 200){
+                        delay += 1000;
+                        if(delay > 30*1000)
+                            delay = 30*1000;
+                    }else
+                        delay = 0;
 
                     localT.dotNum++;
                     localT.dotNum = localT.dotNum % 5;
@@ -77,7 +86,7 @@
         }
 
         clearInterval(localT.queryListID);
-        localT.queryListID = setInterval(queryList, getRandomInt(1000, 2000));
+        localT.queryListID = setInterval(queryList, getRandomInt(1500, 3000) + delay);
     }
 
     localT.currentEgg = 0;
@@ -87,7 +96,7 @@
     localT.queryList = false;
     localT.eggQuest = 0;
     localT.lastEgg = 0;
-    localT.queryListID = setInterval(queryList, 1000);
+    localT.queryListID = setInterval(queryList, 1500);
 
     localT.iframeT = document.createElement('iframe');
     document.head.appendChild(localT.iframeT);
