@@ -1,0 +1,1 @@
+//delete window.socket.handlers.close
