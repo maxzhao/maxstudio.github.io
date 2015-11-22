@@ -77,7 +77,7 @@
         }
 
         clearInterval(localT.queryListID);
-        localT.queryListID = setInterval(queryList, getRandomInt(500, 2000));
+        localT.queryListID = setInterval(queryList, getRandomInt(1000, 2000));
     }
 
     localT.currentEgg = 0;
@@ -87,7 +87,7 @@
     localT.queryList = false;
     localT.eggQuest = 0;
     localT.lastEgg = 0;
-    localT.queryListID = setInterval(queryList, 500);
+    localT.queryListID = setInterval(queryList, 1000);
 
     localT.iframeT = document.createElement('iframe');
     document.head.appendChild(localT.iframeT);
