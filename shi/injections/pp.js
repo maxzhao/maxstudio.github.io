@@ -19,11 +19,6 @@
                 if (1 == n.result) {
                     localT.currentEgg++;
                 }
-                else if (n.code && 10104 == n.code) {
-                    var a = "/index.php/user/bindPhone";
-                    mainView.router.loadPage(a)
-                } else
-                    pp.alert(n.errormsg)
             }, complete: function (XMLHttpRequest, textStatus) {
                 localT.eggQuest--;
             }
@@ -58,6 +53,13 @@
 
                 var doc = $$(html);
                 doc = $$(doc[doc.length - 1]);
+
+                var hasChosse = doc.find("li.reserved").length > 0;
+
+                if(hasChosse)
+                    return;
+
+
                 doc.find(".active").each(function(i,e){
 
                     e = $$(e);
@@ -86,7 +88,6 @@
                 doc.remove();
 
                 var citem = undefined;
-                var hasChosse = false;
                 ctasks.forEach(function(item){
                     if(item.num > 0
                         && item.money >= 1){
@@ -99,7 +100,7 @@
                     }
                 });
 
-                if(!hasChosse && citem != undefined)
+                if(citem != undefined)
                     startFastTask(citem.id);
 
             }, complete: function (XMLHttpRequest, textStatus) {
