@@ -29,7 +29,6 @@
         var items = [];
         datas.forEach(function (item) {
             if(item.status == 1
-                && item.qty > 0
                 && item.reward >= 1
                 && item.type == 1){
 
@@ -91,7 +90,7 @@
 
         localT.lockCount = 0;
 
-        if(localT.queryListDelay > 10){
+        if(localT.queryListDelay > 5){
 
             localT.queryList = true;
             localT.queryListDelay = 0;
