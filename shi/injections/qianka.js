@@ -4,17 +4,7 @@
 
     var services = angular.injector(["task.services"]);
 
-    function queryList() {
-
-        if ((localT.queryList || localT.eggQuest > 0)
-            && localT.lockCount < 5) {
-            localT.lockCount++;
-            return;
-        }
-
-        localT.lockCount = 0;
-        localT.blocked = false;
-
+    function refreshList(){
         localT.queryList = true;
         services.invoke(function($api){
             $api.getTimedTaskList().then(
@@ -46,7 +36,7 @@
                             if(citem == undefined)
                                 citem = item;
                             else if(item.reward > citem
-                            || (item.reward==citem.reward && item.qty < citem.qty))
+                                || (item.reward==citem.reward && item.qty < citem.qty))
                                 citem = item;
                         }
                     });
@@ -70,7 +60,20 @@
                     localT.queryList = false;
                 }
             );});
+    }
 
+    function queryList() {
+
+        if ((localT.queryList || localT.eggQuest > 0)
+            && localT.lockCount < 5) {
+            localT.lockCount++;
+            return;
+        }
+
+        localT.lockCount = 0;
+
+        if(!localT.blocked)
+            refreshList();
 
         function getRandomInt(min, max) {
 
@@ -83,6 +86,7 @@
 
         clearInterval(localT.queryListID);
         localT.queryListID = setInterval(queryList, getRandomInt(2000, 3000));
+        localT.blocked = false;
     }
 
     localT.currentEgg = 0;
