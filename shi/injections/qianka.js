@@ -81,8 +81,8 @@
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        clearTimeout(localT.queryListID);
-        localT.queryListID = setTimeout(queryList, getRandomInt(2000, 3000));
+        setInterval(localT.queryListID);
+        localT.queryListID = setInterval(queryList, getRandomInt(2000, 3000));
         localT.blocked = false;
     }
 
