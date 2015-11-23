@@ -9,12 +9,6 @@
         services.invoke(function($api){
             $api.getTimedTaskList().then(
                 function(rep){
-
-                    if(rep.code != 200){
-                        localT.blocked = true;
-                        return;
-                    }
-
                     localT.dotNum++;
                     localT.dotNum = localT.dotNum % 5;
 
@@ -55,6 +49,9 @@
                                 localT.eggQuest--;
                             }
                         );})
+                }, function(err){
+                    console.log(err);
+                    localT.blocked = true;
                 }).finally(
                 function(){
                     localT.queryList = false;
@@ -84,8 +81,8 @@
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        clearInterval(localT.queryListID);
-        localT.queryListID = setInterval(queryList, getRandomInt(2000, 3000));
+        clearTimeout(localT.queryListID);
+        localT.queryListID = setTimeout(queryList, getRandomInt(2000, 3000));
         localT.blocked = false;
     }
 
