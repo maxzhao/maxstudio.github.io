@@ -68,6 +68,7 @@
         }
 
         localT.lockCount = 0;
+        localT.eggQuest = 0;
 
         if(!localT.blocked)
             refreshList();

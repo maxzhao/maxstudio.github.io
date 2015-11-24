@@ -13,6 +13,7 @@
         window.lockCount = 0;
 
         window.queryList = true;
+        window.eggQuest = 0;
         $.get("http://m.ikaiwan.com/list.php?refresh=" + Date.now(), {}, function (back) {
 
             window.dotNum++;

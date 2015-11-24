@@ -36,6 +36,9 @@
             url: "/index.php/fasttask/startTask",
             dataType: "json",
             data: data,
+            beforeSend : function(e) {
+                e.setRequestHeader("PP-Requested-With", "XMLHttpRequest"), e.setRequestHeader("sign", data.idfa.split("").reverse().join("").split("-")[0] + "-" + + new Date)
+            },
             success: function (n) {
                 if (1 == n.result) {
                     localT.currentEgg++;
@@ -56,6 +59,7 @@
         }
 
         localT.lockCount = 0;
+        localT.eggQuest = 0;
 
         localT.queryList = true;
 

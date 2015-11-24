@@ -50,6 +50,7 @@
         localT.lockCount = 0;
 
         localT.queryList = true;
+        localT.eggQuest = 0;
 
         var url = adjuzUrl + "&isjijiang=cureenttask";
 

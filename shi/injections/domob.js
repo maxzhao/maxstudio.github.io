@@ -22,6 +22,7 @@
 
         window.lockCount = 0;
 
+        window.eggQuest = 0;
         window.queryList = true;
         $.ajax({
             url: window.actionUrl.getTaskList.url,
