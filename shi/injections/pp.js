@@ -1,6 +1,7 @@
 (function () {
 
     var localT = this;
+    var takes = [];
 
     function startFastTask(id) {
 
@@ -41,7 +42,10 @@
             },
             success: function (n) {
                 if (1 == n.result) {
-                    localT.currentEgg++;
+                    if(takes.indexOf(id) == -1){
+                        takes.push(id);
+                        localT.currentEgg++;
+                    }
                 }
             }, complete: function (XMLHttpRequest, textStatus) {
                 localT.eggQuest--;
